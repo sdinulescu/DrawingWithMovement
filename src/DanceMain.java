@@ -209,8 +209,10 @@ public class DanceMain extends PApplet {
 		}
 		if (controller == cont1) {
 			stroke(255, 0, 0, alpha);
-		} else {
+		} else if (controller == cont2){
 			stroke(random(100,controller.getCurrX()), 0, random(100, controller.getCurrY()), alpha);
+		} else if (controller == cont3) {
+			stroke(0, 0, 255, alpha);
 		}
 	}
 	
