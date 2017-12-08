@@ -1,3 +1,7 @@
+/*MarkovGenerator.java
+ * Created by Stejara Dinulescu
+ * Class to deal with all markov training calculations and generation
+ */
 import java.util.ArrayList;
 
 public class MarkovGenerator<E> {
@@ -13,7 +17,7 @@ public class MarkovGenerator<E> {
 		
 	MarkovGenerator() {}
 	
-	ArrayList<Float> getGeneratedMarkov() {
+	ArrayList<Float> getGeneratedMarkov() { //getter for the arrayList of generated values
 		return generatedMarkov;
 	}
 	
@@ -40,7 +44,6 @@ public class MarkovGenerator<E> {
 		transitionTable = new int[alphabet.size()][alphabet.size()];
 		int number = 0; //counts how many times the a number comes after the other
 
-		
 		for (int i = 0; i < alphabet.size(); i++) {
 			for (int j = 0;  j < alphabet.size(); j++) {
 				for (int a = 0; a < elements.size() - 1; a++) { //searches through the whole input arrayList
@@ -93,16 +96,20 @@ public class MarkovGenerator<E> {
 		}
 	}
 	
-	void train(ArrayList<Float> elements) {
+	void train(ArrayList<Float> elements) { //train function
 		createAlphabet(elements);
-		//printAlphabetInstances();
 		createTransitionTable(elements);
-		//testTransitionTable();
 		calculateProbabilities();
+	}
+	
+	void testMarkov() { //unit test statement
+		printAlphabetInstances();
+		//NOTE: the following functions are commented out because their print outs take up a very large space in the output
+		//testTransitionTable();
 		//testProbabilities();
 	}
 	
-	float findSeed() {
+	float findSeed() { //finds the seed to generate from in the Markov chain
 		float mostCommonValue = 0;
 		int commCount = 0;
 		for (int i = 0; i < instances.size()-1; i++) {
@@ -116,21 +123,26 @@ public class MarkovGenerator<E> {
 		} else { //else, start from the word that is the most probable to occur
 			mostCommonValue = (float) alphabet.get(instances.indexOf(commCount));
 		}
-		return mostCommonValue;
+		return mostCommonValue; //returns the seed to generate
 	}
 	
-	void generate(E seed) {
+	void generate(E seed) { //generates based on the seed and probabilities calculated
 		double prob = 0.0;
 		double numMarkov = Math.random(); //random number generator
 		
 		if (alphabet.contains(seed)) {
 			for (int j = 0; j < alphabet.size(); j++) {
-				if (prob < numMarkov && numMarkov <= (prob + probabilities[alphabet.indexOf(seed)][j])) {
+				if (prob < numMarkov && numMarkov <= (prob + probabilities[alphabet.indexOf(seed)][j])) { //checks if random number generated is within the probability
 					generatedMarkov.add(alphabet.get(j)); //adds to the generated arrayList based on probability
 				} else {}
-				prob = prob + probabilities[alphabet.indexOf(seed)][j];
+				prob = prob + probabilities[alphabet.indexOf(seed)][j]; //move on
 			}
 		}
 	}
 	
+	void clearVals() {
+		alphabet.clear();
+		instances.clear();
+		generatedMarkov.clear();
+	}
 }
